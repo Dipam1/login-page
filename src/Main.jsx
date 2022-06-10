@@ -2,48 +2,34 @@ import React from "react";
 import { useState } from "react";
 import LoggedIn from "./LoggedIn";
 import { ReCAPTCHA } from "react-google-recaptcha";
+import PasswordStrengthBar from "react-password-strength-bar";
 
 const Main = () => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-  const [strong, setstrong] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [allEmails, setEmails] = useState([]);
-
-  var errors = [];
+  const [scoree, setScore] = useState(null);
+  const [feedback, setFeedback] = useState(null);
 
   const loginClicked = (e) => {
     e.preventDefault();
     validatePassword(password);
 
-    if (strong) {
-      const a = allEmails;
-
-      a.push(email);
-
-      setEmails(a);
+    if (scoree > 2) {
+      const emails = JSON.parse(localStorage.getItem("emails")) || [];
+      emails.push(email);
+      localStorage.setItem("emails", JSON.stringify(emails));
 
       setLoggedIn(true);
     }
   };
 
   function validatePassword(p) {
-    errors = [];
     if (p.length < 8) {
-      errors.push("Your password must be at least 8 characters");
+      setFeedback({
+        suggestions: ["Password must be at least 8 characters long"],
+      });
     }
-    if (p.search(/[a-z]/i) < 0) {
-      errors.push("Your password must contain at least one letter.");
-    }
-    if (p.search(/[0-9]/) < 0) {
-      errors.push("Your password must contain at least one digit.");
-    }
-    if (errors.length > 0) {
-      alert(errors.join("\n"));
-      setstrong(false);
-      return false;
-    }
-    setstrong(true);
   }
 
   const capchaChange = (value) => {
@@ -52,9 +38,11 @@ const Main = () => {
 
   return (
     <div>
-      {" "}
       {loggedIn ? (
-        <LoggedIn allEmails={allEmails} setLoggedIn={setLoggedIn} />
+        <LoggedIn
+          allEmails={JSON.parse(localStorage.getItem("emails"))}
+          setLoggedIn={setLoggedIn}
+        />
       ) : (
         <div className="form-box">
           <div className="header-form">
@@ -85,6 +73,26 @@ const Main = () => {
                   placeholder="Password"
                 />
               </div>
+              <PasswordStrengthBar
+                password={password}
+                onChangeScore={(score, feedback) => {
+                  setScore(score);
+                  setFeedback(feedback);
+                  console.log(scoree, feedback);
+                }}
+                minLength={8}
+              />
+              {scoree < 3 && scoree !== null ? (
+                <div className="">
+                  <strong>
+                    <i className="fa fa-exclamation-triangle"></i>
+                  </strong>
+                  {feedback.suggestions ? feedback.suggestions[0] : ""}
+                </div>
+              ) : (
+                ""
+              )}
+
               <ReCAPTCHA
                 sitekey="6Le8vU8gAAAAAPYPFDiR2pOkfYpF4o2rFQ1Pc_o5"
                 onChange={capchaChange}
