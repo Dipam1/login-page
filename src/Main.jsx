@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import LoggedIn from "./LoggedIn";
-import { ReCAPTCHA } from "react-google-recaptcha";
+import captcha from "./assets/captcha.png";
 import PasswordStrengthBar from "react-password-strength-bar";
 
 const Main = () => {
@@ -10,10 +10,16 @@ const Main = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [scoree, setScore] = useState(null);
   const [feedback, setFeedback] = useState(null);
+  const [acaptcha, setCaptcha] = useState("");
 
   const loginClicked = (e) => {
     e.preventDefault();
     validatePassword(password);
+
+    if (acaptcha !== "Td4eVa") {
+      alert("Captcha is incorrect");
+      return;
+    }
 
     if (scoree > 2) {
       const emails = JSON.parse(localStorage.getItem("emails")) || [];
@@ -92,11 +98,13 @@ const Main = () => {
               ) : (
                 ""
               )}
-
-              <ReCAPTCHA
-                sitekey="6Le8vU8gAAAAAPYPFDiR2pOkfYpF4o2rFQ1Pc_o5"
-                onChange={capchaChange}
-              />
+              <div className="center">
+                <img src={captcha} width={200} height={60} />
+                <input
+                  placeholder="Enter Captcha"
+                  onChange={(event) => setCaptcha(event.target.value)}
+                />
+              </div>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <button type="submit" className="btn btn-secondary btn-block">
                   LOGIN
