@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import LoggedIn from "./LoggedIn";
-import captcha from "./assets/captcha.png";
 import PasswordStrengthBar from "react-password-strength-bar";
 import Captcha from "demos-react-captcha";
 
@@ -39,9 +38,6 @@ const Main = () => {
     }
   }
 
-  const capchaChange = (value) => {
-    console.log(value);
-  };
 
   return (
     <div>
