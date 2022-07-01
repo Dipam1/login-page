@@ -18,11 +18,10 @@ form {
 }
 
 .center {
+  margin-top: 20px;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: center;
   justify-content: center;
+  font-family: sans-serif;
 }
 .image {
   text-align: center;
@@ -37,6 +36,9 @@ form {
   justify-content: flex-start;
   opacity: 0.5;
   border-radius: 2%;
+}
+.rnc-column {
+  display: none!important;
 }
 .header-form {
   margin-bottom: 15px;

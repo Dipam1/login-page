@@ -3,6 +3,7 @@ import { useState } from "react";
 import LoggedIn from "./LoggedIn";
 import captcha from "./assets/captcha.png";
 import PasswordStrengthBar from "react-password-strength-bar";
+import Captcha from "demos-react-captcha";
 
 const Main = () => {
   const [email, setemail] = useState("");
@@ -10,13 +11,13 @@ const Main = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [scoree, setScore] = useState(null);
   const [feedback, setFeedback] = useState(null);
-  const [acaptcha, setCaptcha] = useState("");
+  const [acaptcha, setCaptcha] = useState(false);
 
   const loginClicked = (e) => {
     e.preventDefault();
     validatePassword(password);
 
-    if (acaptcha !== "Td4eVa") {
+    if (!acaptcha) {
       alert("Captcha is incorrect");
       return;
     }
@@ -99,11 +100,22 @@ const Main = () => {
                 ""
               )}
               <div className="center">
-                <img src={captcha} width={200} height={60} />
+                {/* <img src={captcha} width={200} height={60} />
                 <input
                   placeholder="Enter Captcha"
                   onChange={(event) => setCaptcha(event.target.value)}
-                />
+                /> */}
+                {acaptcha ? (
+                  ""
+                ) : (
+                  <Captcha
+                    onChange={(item) => {
+                      console.log(item);
+                      setCaptcha(item);
+                    }}
+                    placeholder="Enter captcha"
+                  />
+                )}
               </div>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <button type="submit" className="btn btn-secondary btn-block">
